@@ -7,7 +7,7 @@
 1. Run `cargo web start`
 
 ### Play
-[link](https://kupopuffs.github.io/kuptris/)
+* [link](https://kupopuffs.github.io/kuptris/)
 
 ### Resources
 * Thanks to tensor-programming for their [wasm-snake-example project](https://github.com/tensor-programming/wasm_snake_example)
