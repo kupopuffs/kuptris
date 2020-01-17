@@ -27,10 +27,10 @@ fn main() {
         let snake = snake.clone();
         move |event: KeyDownEvent| {
             match event.key().as_ref() {
-                "ArrowLeft" => snake.borrow_mut().change_direction(Direction::Left),
-                "ArrowRight" => snake.borrow_mut().change_direction(Direction::Right),
-                "ArrowDown" => snake.borrow_mut().change_direction(Direction::Down),
-                "ArrowUp" => snake.borrow_mut().change_direction(Direction::Up),
+                "A" => snake.borrow_mut().change_direction(Direction::Left),
+                "D" => snake.borrow_mut().change_direction(Direction::Right),
+                "S" => snake.borrow_mut().change_direction(Direction::Down),
+                "W" => snake.borrow_mut().change_direction(Direction::Up),
                 _ => {}
             };
         }
@@ -47,7 +47,7 @@ fn main() {
         );
     }
 
-    game_loop(snake, Rc::new(canvas), 100);
+    game_loop(snake, Rc::new(canvas), 10);
 
     stdweb::event_loop();
 }
