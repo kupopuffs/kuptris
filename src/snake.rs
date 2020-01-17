@@ -1,9 +1,16 @@
 use canvas::Canvas;
 use direction::Direction;
 use stdweb::unstable::TryInto;
+use std::f64::consts::PI;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 struct Block(u32, u32);
+
+
+const TOP_LEFT_RAD: f64 = -PI / 3.0 * 4.0;
+const TOP_RIGHT_RAD: f64 = -PI / 4.0;
+const BOTTOM_RIGHT_RAD: f64 = PI / 4.0;
+const BOTTOM_LEFT_RAD: f64 = PI / 3.0 * 4.0;
 
 #[derive(Debug)]
 pub struct Snake {
@@ -72,15 +79,17 @@ impl Snake {
     pub fn touch_up(&mut self, x: f64, y: f64) {
         let delta_x = x - self.touch_start_x;
         let delta_y = y - self.touch_start_y;
+        console!(log, "%s %s", delta_x, delta_y);
         if delta_x.abs() < 0.00000005_f64 {
             return;
         }
         let angle = delta_y.atan2(delta_x);
+        console!(log, "%s", angle);
         match angle {
-            x if (0.0..90.0).contains(&x) => self.change_direction(Direction::Right),
-            x if (90.0..180.0).contains(&x) => self.change_direction(Direction::Up),
-            x if (180.0..270.0).contains(&x) => self.change_direction(Direction::Left),
-            _ => self.change_direction(Direction::Down),
+            x if (TOP_LEFT_RAD..TOP_RIGHT_RAD).contains(&x) => self.change_direction(Direction::Up),
+            x if (TOP_RIGHT_RAD..BOTTOM_RIGHT_RAD).contains(&x) => self.change_direction(Direction::Right),
+            x if (BOTTOM_RIGHT_RAD..BOTTOM_LEFT_RAD).contains(&x) => self.change_direction(Direction::Down),
+            _ => self.change_direction(Direction::Left),
         }
     }
 

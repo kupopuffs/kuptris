@@ -10,7 +10,7 @@ use direction::Direction;
 use snake::Snake;
 
 use stdweb::traits::*;
-use stdweb::web::{event::{KeyDownEvent, TouchEnter, TouchEnd}, IEventTarget};
+use stdweb::web::{event::{KeyDownEvent, TouchStart, TouchEnd}, IEventTarget};
 
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -40,19 +40,26 @@ fn main() {
 
     stdweb::web::document().add_event_listener({
         let snake = snake.clone();
-        move |event: TouchEnter| {
-            let x = event.touches()[0].page_x();
-            let y = event.touches()[0].page_y();
+        move |event: TouchStart| {
+            let touches = event.changed_touches();
+            if touches.len() == 0 {
+                return;
+            }
+            let x = touches[0].page_x();
+            let y = touches[0].page_y();
             snake.borrow_mut().touch_down(x, y);
-            snake.borrow_mut().change_direction(Direction::Down);
         }
     });
 
     stdweb::web::document().add_event_listener({
         let snake = snake.clone();
         move |event: TouchEnd| {
-            let x = event.touches()[0].page_x();
-            let y = event.touches()[0].page_y();
+            let touches = event.changed_touches();
+            if touches.len() == 0 {
+                return;
+            }
+            let x = touches[0].page_x();
+            let y = touches[0].page_y();
             snake.borrow_mut().touch_up(x, y);
         }
     });
