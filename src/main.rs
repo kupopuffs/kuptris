@@ -44,6 +44,7 @@ fn main() {
             let x = event.touches()[0].page_x();
             let y = event.touches()[0].page_y();
             snake.borrow_mut().touch_down(x, y);
+            snake.borrow_mut().change_direction(Direction::Down);
         }
     });
 
