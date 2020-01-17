@@ -13,19 +13,13 @@ pub struct Canvas {
 }
 
 impl Canvas {
-    pub fn new(attr_id: &str, width: u32, height: u32) -> Canvas {
+    pub fn new(attr_id: &str, width: u32, height: u32,) -> Canvas {
         let canvas: CanvasElement = document()
             .query_selector(attr_id)
             .unwrap()
             .unwrap()
             .try_into()
             .unwrap();
-
-        let inner_width = stdweb::web::window().inner_width() as u32;
-        let inner_height = stdweb::web::window().inner_height() as u32;
-
-        canvas.set_width(inner_width);
-        canvas.set_height(inner_height);
 
         let ctx: CanvasRenderingContext2d = canvas.get_context().unwrap();
 

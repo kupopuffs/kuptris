@@ -1,16 +1,17 @@
 use canvas::Canvas;
 use direction::Direction;
+
 use stdweb::unstable::TryInto;
+
 use std::f64::consts::PI;
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq)]
 struct Block(u32, u32);
 
-
-const TOP_LEFT_RAD: f64 = -PI / 3.0 * 4.0;
+const TOP_LEFT_RAD: f64 = -PI / 4.0 * 3.0;
 const TOP_RIGHT_RAD: f64 = -PI / 4.0;
 const BOTTOM_RIGHT_RAD: f64 = PI / 4.0;
-const BOTTOM_LEFT_RAD: f64 = PI / 3.0 * 4.0;
+const BOTTOM_LEFT_RAD: f64 = PI / 4.0 * 3.0;
 
 #[derive(Debug)]
 pub struct Snake {
@@ -85,6 +86,7 @@ impl Snake {
         }
         let angle = delta_y.atan2(delta_x);
         console!(log, "%s", angle);
+        console!(log, "RADS! %s %s", BOTTOM_RIGHT_RAD, BOTTOM_LEFT_RAD);
         match angle {
             x if (TOP_LEFT_RAD..TOP_RIGHT_RAD).contains(&x) => self.change_direction(Direction::Up),
             x if (TOP_RIGHT_RAD..BOTTOM_RIGHT_RAD).contains(&x) => self.change_direction(Direction::Right),

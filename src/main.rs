@@ -11,16 +11,40 @@ use snake::Snake;
 
 use stdweb::traits::*;
 use stdweb::web::{event::{KeyDownEvent, TouchStart, TouchEnd}, IEventTarget};
+use stdweb::web::html_element::CanvasElement;
+use stdweb::web::document;
+use stdweb::unstable::TryInto;
 
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::cmp;
+
+const CANVAS_ELEMENT_ID: &str = "#canvas";
+const GAME_LOOP_TIMEOUT: u32 = 100;
+
+fn setup_canvas_size() {
+    let canvas: CanvasElement = document()
+        .query_selector(CANVAS_ELEMENT_ID)
+        .unwrap()
+        .unwrap()
+        .try_into()
+        .unwrap();
+
+    let inner_width = stdweb::web::window().inner_width() as u32;
+    let inner_height = stdweb::web::window().inner_height() as u32;
+    let min = cmp::min(inner_width, inner_height);
+
+    canvas.set_width(min);
+    canvas.set_height(min);
+
+}
 
 fn main() {
     stdweb::initialize();
 
-    println!("hello there!");
+    setup_canvas_size();
 
-    let canvas = Canvas::new("#canvas", 20, 20);
+    let canvas = Canvas::new(CANVAS_ELEMENT_ID, 20, 20);
     let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
 
     snake.borrow().draw(&canvas);
@@ -75,7 +99,7 @@ fn main() {
         );
     }
 
-    game_loop(snake, Rc::new(canvas), 50);
+    game_loop(snake, Rc::new(canvas), GAME_LOOP_TIMEOUT);
 
     stdweb::event_loop();
 }
