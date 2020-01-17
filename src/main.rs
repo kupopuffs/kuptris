@@ -10,13 +10,15 @@ use direction::Direction;
 use snake::Snake;
 
 use stdweb::traits::*;
-use stdweb::web::{event::KeyDownEvent, IEventTarget};
+use stdweb::web::{event::{KeyDownEvent, TouchEnter, TouchEnd}, IEventTarget};
 
 use std::cell::RefCell;
 use std::rc::Rc;
 
 fn main() {
     stdweb::initialize();
+
+    println!("hello there!");
 
     let canvas = Canvas::new("#canvas", 20, 20);
     let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
@@ -27,12 +29,30 @@ fn main() {
         let snake = snake.clone();
         move |event: KeyDownEvent| {
             match event.key().as_ref() {
-                "A" => snake.borrow_mut().change_direction(Direction::Left),
-                "D" => snake.borrow_mut().change_direction(Direction::Right),
-                "S" => snake.borrow_mut().change_direction(Direction::Down),
-                "W" => snake.borrow_mut().change_direction(Direction::Up),
+                "a" => snake.borrow_mut().change_direction(Direction::Left),
+                "d" => snake.borrow_mut().change_direction(Direction::Right),
+                "s" => snake.borrow_mut().change_direction(Direction::Down),
+                "w" => snake.borrow_mut().change_direction(Direction::Up),
                 _ => {}
             };
+        }
+    });
+
+    stdweb::web::document().add_event_listener({
+        let snake = snake.clone();
+        move |event: TouchEnter| {
+            let x = event.touches()[0].page_x();
+            let y = event.touches()[0].page_y();
+            snake.borrow_mut().touch_down(x, y);
+        }
+    });
+
+    stdweb::web::document().add_event_listener({
+        let snake = snake.clone();
+        move |event: TouchEnd| {
+            let x = event.touches()[0].page_x();
+            let y = event.touches()[0].page_y();
+            snake.borrow_mut().touch_up(x, y);
         }
     });
 
@@ -47,7 +67,7 @@ fn main() {
         );
     }
 
-    game_loop(snake, Rc::new(canvas), 10);
+    game_loop(snake, Rc::new(canvas), 50);
 
     stdweb::event_loop();
 }

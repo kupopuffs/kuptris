@@ -21,6 +21,12 @@ impl Canvas {
             .try_into()
             .unwrap();
 
+        let inner_width = stdweb::web::window().inner_width() as u32;
+        let inner_height = stdweb::web::window().inner_height() as u32;
+
+        canvas.set_width(inner_width);
+        canvas.set_height(inner_height);
+
         let ctx: CanvasRenderingContext2d = canvas.get_context().unwrap();
 
         let scaled_width = canvas.width() / width;
@@ -62,4 +68,5 @@ impl Canvas {
             f64::from(self.height * self.scaled_height),
         );
     }
+
 }

@@ -15,6 +15,9 @@ pub struct Snake {
     direction: Option<Direction>,
     next_direction: Option<Direction>,
     last_direction: Direction,
+
+    touch_start_x: f64,
+    touch_start_y: f64,
 }
 
 impl Snake {
@@ -48,6 +51,8 @@ impl Snake {
             direction: None,
             next_direction: None,
             last_direction: Direction::Right,
+            touch_start_x: 0_f64,
+            touch_start_y: 0_f64,
         }
     }
 
@@ -58,6 +63,27 @@ impl Snake {
             self.next_direction = Some(direction)
         }
     }
+
+    pub fn touch_down(&mut self, x: f64, y: f64) {
+        self.touch_start_x = x;
+        self.touch_start_y = y;
+    }
+
+    pub fn touch_up(&mut self, x: f64, y: f64) {
+        let delta_x = x - self.touch_start_x;
+        let delta_y = y - self.touch_start_y;
+        if delta_x.abs() < 0.00000005_f64 {
+            return;
+        }
+        let angle = delta_y.atan2(delta_x);
+        match angle {
+            x if (0.0..90.0).contains(&x) => self.change_direction(Direction::Right),
+            x if (90.0..180.0).contains(&x) => self.change_direction(Direction::Up),
+            x if (180.0..270.0).contains(&x) => self.change_direction(Direction::Left),
+            _ => self.change_direction(Direction::Down),
+        }
+    }
+
 
     pub fn update(&mut self) {
         let direction = self.direction.unwrap_or(self.last_direction);
