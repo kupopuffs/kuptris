@@ -18,8 +18,8 @@ use std::rc::Rc;
 fn main() {
     stdweb::initialize();
 
-    let canvas = Canvas::new("#canvas", 40, 40);
-    let snake = Rc::new(RefCell::new(Snake::new(40, 40)));
+    let canvas = Canvas::new("#canvas", 20, 20);
+    let snake = Rc::new(RefCell::new(Snake::new(20, 20)));
 
     snake.borrow().draw(&canvas);
 
@@ -47,7 +47,7 @@ fn main() {
         );
     }
 
-    game_loop(snake, Rc::new(canvas), 10);
+    game_loop(snake, Rc::new(canvas), 100);
 
     stdweb::event_loop();
 }
