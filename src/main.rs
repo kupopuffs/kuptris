@@ -36,7 +36,6 @@ fn setup_canvas_size() {
 
     canvas.set_width(min);
     canvas.set_height(min);
-
 }
 
 fn main() {
